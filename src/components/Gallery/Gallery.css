@@ -1,0 +1,16 @@
+.gallery h2 {
+  font-size: 3rem;
+  margin: 0;
+  padding: 0;
+  font-family: "lateef";
+}
+
+.gallery__container-left {
+  display: flex;
+  flex-direction: flex-start;
+  justify-content: flex-start;
+  padding-left: 56px;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  margin: 0;
+}
