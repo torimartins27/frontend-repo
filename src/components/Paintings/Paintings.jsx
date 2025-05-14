@@ -1,5 +1,5 @@
-import "./Paintings.css";
 import React, { useState, useEffect } from "react";
+import { fetchArtworks } from "../../utils/api";
 
 function Paintings({ onArtworkClick }) {
   const [artworks, setArtworks] = useState([]);
@@ -7,21 +7,18 @@ function Paintings({ onArtworkClick }) {
   const [filteredArtworks, setFilteredArtworks] = useState([]);
 
   useEffect(() => {
-    const fetchArtworks = async () => {
+    const loadArtworks = async () => {
       try {
-        const response = await fetch(
-          "https://api.artic.edu/api/v1/artworks?limit=100"
-        );
-        const data = await response.json();
-        setArtworks(data.data);
-        setLoading(false);
+        const data = await fetchArtworks();
+        setArtworks(data);
       } catch (error) {
-        console.error("Error fetching artworks:", error);
+        console.error("Failed to fetch artworks:", error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchArtworks();
+    loadArtworks();
   }, []);
 
   useEffect(() => {

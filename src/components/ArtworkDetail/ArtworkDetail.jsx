@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import striptags from "striptags";
+import { fetchArtworkDetail } from "../../utils/api";
 import "./ArtworkDetail.css";
 
 function ArtworkDetail() {
@@ -9,21 +10,18 @@ function ArtworkDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchArtworkDetail = async () => {
+    const loadArtwork = async () => {
       try {
-        const response = await fetch(
-          `https://api.artic.edu/api/v1/artworks/${id}`
-        );
-        const data = await response.json();
-        setArtwork(data.data);
-        setLoading(false);
+        const result = await fetchArtworkDetail(id);
+        setArtwork(result);
       } catch (error) {
-        console.error("Error fetching artwork details:", error);
+        console.error("Failed to load artwork:", error);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchArtworkDetail();
+    loadArtwork();
   }, [id]);
 
   if (loading) return <div>Loading...</div>;
@@ -31,7 +29,7 @@ function ArtworkDetail() {
 
   return (
     <div className="artwork-detail">
-      <h2>{artwork.title}</h2>
+      <h2 className="artwork-title">{artwork.title}</h2>
       <p>{artwork.artist_display}</p>
       {artwork.image_id ? (
         <img

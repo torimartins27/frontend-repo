@@ -13,3 +13,27 @@ export const fetchFeaturedArtworks = async () => {
     return [];
   }
 };
+
+export async function fetchArtworkDetail(id) {
+  try {
+    const response = await fetch(`https://api.artic.edu/api/v1/artworks/${id}`);
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching artwork details:", error);
+    throw error;
+  }
+}
+
+export async function fetchArtworks(limit = 100) {
+  try {
+    const response = await fetch(
+      `https://api.artic.edu/api/v1/artworks?limit=${limit}`
+    );
+    const data = await response.json();
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching artworks:", error);
+    throw error;
+  }
+}

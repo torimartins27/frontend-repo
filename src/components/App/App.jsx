@@ -6,10 +6,10 @@ import ArtworkDetail from "../ArtworkDetail/ArtworkDetail";
 import Gallery from "../Gallery/Gallery";
 import Paintings from "../Paintings/Paintings";
 import Form from "../Form/Form";
+import BackToTopButton from "../BackToTopButton/BackToTopButton";
 
 import { fetchFeaturedArtworks } from "../../utils/api";
 
-import Main from "../Main/Main";
 import Textiles from "../Textiles/Textiles";
 
 function App() {
@@ -33,6 +33,7 @@ function App() {
     <div className="page">
       <div className="page_content">
         <Header />
+        <BackToTopButton />
         <Routes>
           <Route
             path="/"
