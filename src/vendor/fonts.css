@@ -1,7 +1,7 @@
 @font-face {
-  font-family: "lateef";
+  font-family: "bodoni", serif;
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url("./fonts/Lateef-Light.woff");
+  src: url("./fonts/Bodoni.ttf") format("truetype");
 }
