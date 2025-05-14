@@ -13,11 +13,15 @@ function Gallery({ artworks, onArtworkClick }) {
               className="gallery-item"
               onClick={() => onArtworkClick(artwork.id)}
             >
-              <img
-                src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
-                alt={artwork.title}
-                className="artwork-image"
-              />
+              {artwork.image_id ? (
+                <img
+                  src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
+                  alt={artwork.title}
+                  className="artwork-image"
+                />
+              ) : (
+                <div className="image-placeholder">Image Not Available</div>
+              )}
               <div className="artwork-info">
                 <h3>{artwork.title}</h3>
                 <p>{artwork.artist_display}</p>
