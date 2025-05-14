@@ -35,7 +35,7 @@ function Gallery({ artworks, onArtworkClick }) {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-
+  console.log(filteredArtworks);
   return (
     <section className="gallery-section">
       <div className="gallery__header">
