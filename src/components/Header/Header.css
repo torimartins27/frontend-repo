@@ -77,11 +77,18 @@
     width: 150px;
     height: 150px;
   }
+  .header {
+    background-size: 450% auto;
+  }
 }
 
 @media (max-width: 375px) {
   .header__logo {
     width: 100px;
     height: 100px;
+  }
+
+  .header {
+    background-size: 460% auto;
   }
 }

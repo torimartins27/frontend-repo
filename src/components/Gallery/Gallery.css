@@ -118,6 +118,7 @@
     justify-content: center;
     gap: 20px;
     text-align: center;
+    padding: 0;
   }
 
   .gallery__container-left,
@@ -181,7 +182,7 @@
   }
 
   .gallery__header {
-    padding-top: 20px;
+    padding-top: 0;
     gap: 16px;
   }
 
@@ -205,6 +206,7 @@
 
   .gallery-title--home {
     margin-left: 0;
+    margin: 0;
   }
 
   .menu-icon--home {
