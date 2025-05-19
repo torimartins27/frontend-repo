@@ -5,6 +5,7 @@ function Paintings({ onArtworkClick }) {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filteredArtworks, setFilteredArtworks] = useState([]);
+  const [size, setSize] = useState("843");
 
   useEffect(() => {
     const loadArtworks = async () => {
@@ -30,8 +31,28 @@ function Paintings({ onArtworkClick }) {
       return paintingTypes.some((type) => medium.includes(type));
     });
 
-    setFilteredArtworks(filteredPaintings);
-  }, [artworks]);
+    const loadImages = async () => {
+      const promises = filteredPaintings.map((artwork) => {
+        if (!artwork.image_id) return Promise.resolve(null);
+
+        const url = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/${size},/0/default.jpg`;
+
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = () => resolve(artwork);
+          img.onerror = () => resolve(null);
+        });
+      });
+
+      const results = await Promise.all(promises);
+      const validArtworks = results.filter(Boolean);
+
+      setFilteredArtworks(validArtworks);
+    };
+
+    loadImages();
+  }, [artworks, size]);
 
   if (loading) return <div>Loading...</div>;
 
@@ -46,15 +67,11 @@ function Paintings({ onArtworkClick }) {
               className="gallery-item"
               onClick={() => onArtworkClick(artwork.id)}
             >
-              {artwork.image_id ? (
-                <img
-                  src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
-                  alt={artwork.title}
-                  className="artwork-image"
-                />
-              ) : (
-                <div className="image-placeholder">Image Not Available</div>
-              )}
+              <img
+                src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/${size},/0/default.jpg`}
+                alt={artwork.title}
+                className="artwork-image"
+              />
               <div className="artwork-info">
                 <h3>{artwork.title}</h3>
                 <p>{artwork.artist_display}</p>

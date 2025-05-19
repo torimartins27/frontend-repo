@@ -8,8 +8,10 @@ import MenuModal from "../MenuModal/MenuModal";
 
 function Gallery({ artworks, onArtworkClick }) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredArtworks, setFilteredArtworks] = useState(artworks);
+  const [filteredArtworks, setFilteredArtworks] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [size, setSize] = useState("843");
+
   const location = useLocation();
 
   useEffect(() => {
@@ -17,25 +19,46 @@ function Gallery({ artworks, onArtworkClick }) {
       duration: 800,
       once: false,
     });
+  }, []);
 
-    if (searchQuery) {
-      const filtered = artworks.filter(
-        (artwork) =>
-          artwork.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          artwork.artist_display
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-      );
-      setFilteredArtworks(filtered);
-    } else {
-      setFilteredArtworks(artworks);
-    }
-  }, [searchQuery, artworks]);
+  useEffect(() => {
+    const loadImages = async () => {
+      const promises = artworks.map((artwork) => {
+        if (!artwork.image_id) return Promise.resolve(null);
+
+        const url = `https://www.artic.edu/iiif/2/${artwork.image_id}/full/${size},/0/default.jpg`;
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = url;
+          img.onload = () => resolve(artwork);
+          img.onerror = () => resolve(null);
+        });
+      });
+
+      const results = await Promise.all(promises);
+      const validArtworks = results.filter(Boolean);
+
+      if (searchQuery) {
+        const filtered = validArtworks.filter(
+          (artwork) =>
+            artwork.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            artwork.artist_display
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
+        );
+        setFilteredArtworks(filtered);
+      } else {
+        setFilteredArtworks(validArtworks);
+      }
+    };
+
+    loadImages();
+  }, [artworks, searchQuery, size]);
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-  console.log(filteredArtworks);
+
   return (
     <section className="gallery-section">
       <div className="gallery__header">
@@ -51,7 +74,7 @@ function Gallery({ artworks, onArtworkClick }) {
         <div className="gallery__container-right">
           <input
             type="text"
-            placeholder="Search artworks..."
+            placeholder="Search featured artworks..."
             value={searchQuery}
             onChange={handleSearchChange}
             className="search-input"
@@ -77,15 +100,11 @@ function Gallery({ artworks, onArtworkClick }) {
               onClick={() => onArtworkClick(artwork.id)}
               data-aos="fade-up"
             >
-              {artwork.image_id ? (
-                <img
-                  src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/843,/0/default.jpg`}
-                  alt={artwork.title}
-                  className="artwork-image"
-                />
-              ) : (
-                <div className="image-placeholder">Image Not Available</div>
-              )}
+              <img
+                src={`https://www.artic.edu/iiif/2/${artwork.image_id}/full/${size},/0/default.jpg`}
+                alt={artwork.title}
+                className="artwork-image"
+              />
               <div className="artwork-info">
                 <h3>{artwork.title}</h3>
                 <p>{artwork.artist_display}</p>
@@ -93,7 +112,7 @@ function Gallery({ artworks, onArtworkClick }) {
             </div>
           ))
         ) : (
-          <p>No artworks found for "{searchQuery}"</p> // Message when no artworks match the search query
+          <p>No artworks found for "{searchQuery}"</p>
         )}
       </div>
     </section>

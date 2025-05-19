@@ -1,9 +1,11 @@
 .header {
   position: relative;
-  height: 100vh;
+  height: 80vh;
   width: 100%;
   background-image: url("../../assets/images/spiral.webp");
-  background-size: cover;
+  background-position: left center;
+  background-size: 120% auto;
+  background-repeat: no-repeat;
   justify-content: space-between;
   align-items: center;
   color: black;
