@@ -24,7 +24,14 @@ function Textiles({ onArtworkClick }) {
   }, []);
 
   useEffect(() => {
-    const formTypes = ["quilt", "tapestry", "cotton", "silk", "weave"];
+    const formTypes = [
+      "quilt",
+      "tapestry",
+      "cotton",
+      "silk",
+      "weave",
+      "fabric",
+    ];
     const filteredTextiles = artworks.filter((artwork) => {
       const medium = artwork.medium_display
         ? artwork.medium_display.toLowerCase().trim()
